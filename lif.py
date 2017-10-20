@@ -1,29 +1,30 @@
 from numpy import *
 from pylab import *
 
-TV = 50
-dtdy = 0.125
-time = linespace(0, TV+dtdy, dtdy, endpoint=True)
+TV = 25
+dtdy = 0.5
+time = arange(0, TV+dtdy, dtdy)
 timeout = 0
 
 V = zeros(len(time))
 R = 1
-C = 10
+C = 5
 tau = R*C
-taur = 4
+taur = 2
 Vth = 1
-Vspike = 0.5
+Vspike = 1
 
-I = 1.5
+I = 2
 
-for i in range(time(len(j):
+
+for i, t in enumerate(time):
 	if TV > timeout:
 		V[i] = V[i-1] + (-V[i-1] + I*R) / tau * dtdy
-		if j >= Vth:
+		if t >= Vth:
 			V[i] += Vspike
-			timeout = j + taur
-plot(time, Vm)
+	timeout = t + taur
+plot(time, V)
 ylabel('Voltage')
 xlabel('Time')
-ylim([0,2])
+ylim([0,50])
 show()
