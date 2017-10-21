@@ -4,53 +4,55 @@ from scipy import *
 from pylab import *
 from scipy.integrate import odeint
 
-C_m = 1.0
-g_Na = 120.0
-g_k = 36.0
-g_L = 0.3
-E_Na = 50.0
-E_K = -77.0
-E_L = -54.387
+Cm = 1.0
+gNa = 120.0
+gk = 36.0
+gL = 0.3
+ENa = 50.0
+EK = -77.0
+EL = -54.387
 
 
-def alpha_m(V): return 0.1*(V+40.0)/(1.0 - sp.exp(-(V+40.0)/ 10.0))
-def beta_m(V): return 4.0*sp.exp(-(V+65.0)/18.0)
-def alpha_h(V): return 0.07*sp.exp(-(V+65.0) / 20.0)
-def beta_h(V): return 1.0/(1.0 + sp.exp(-(V+35.0)/10.0))
-def alpha_n(V): return 0.01*(V+55.0)/(1.0 - sp.exp(-(V+55.0)/10.0))
-def beta_n(V): return 0.125*sp.exp(-(V+65)/ 80.0)
+def alpham(V): 
+	return 0.1*(V+40.0)/(1.0 - sp.exp(-(V+40.0)/ 10.0))
+def betam(V): 
+	return 4.0*sp.exp(-(V+65.0)/18.0)
+def alphah(V): 
+	return 0.07*sp.exp(-(V+65.0) / 20.0)
+def betah(V): 
+	return 1.0/(1.0 + sp.exp(-(V+35.0)/10.0))
+def alphan(V): 
+	return 0.01*(V+55.0)/(1.0 - sp.exp(-(V+55.0)/10.0))
+def betan(V): 
+	return 0.125*sp.exp(-(V+65)/ 80.0)
 
-def I_Na(V,m,h): return g_Na * m**3 * h * (V-E_Na)
-
-def I_K(V, n): return g_k * n**4 *(V- E_K)
-
-def I_L(V): return g_L * (V - E_L)
-
-def I_inj(t): return 10*(t>100)-10*(t>200) + 35*(t>300)
+def INa(V,m,h): return gNa * m**3 * h * (V-ENa)
+def IK(V, n): return gk * n**4 *(V- EK)
+def IL(V): return gL * (V - EL)
+def Iinj(t): return 10*(t>100)-10*(t>200) + 35*(t>300)
 
 t = sp.arange(0.0, 400.0, 0.1)
 
-def dALLdt(X, t):
+def integrate(X, t):
 	V, m, h, n = X
 
-	dVdt = (I_inj(t) - I_Na(V, m, h) - I_K(V, n) - I_L(V)) / C_m
-	dmdt = alpha_m(V)*(1.0-m) - beta_m(V)*m
-	dhdt = alpha_h(V)*(1.0-h) - beta_h(V)*h
-	dndt = alpha_n(V)*(1.0-n) - beta_n(V)*n
+	dVdt = (Iinj(t) - INa(V, m, h) - IK(V, n) - IL(V)) / Cm
+	dmdt = alpham(V)*(1.0-m) - betam(V)*m
+	dhdt = alphah(V)*(1.0-h) - betah(V)*h
+	dndt = alphan(V)*(1.0-n) - betan(V)*n
 	return dVdt, dmdt, dhdt, dndt
 
-X = odeint(dALLdt, [-65, 0.05, 0.6, 0.32], t)
+X = odeint(integrate, [-65, 0.05, 0.6, 0.32], t)
 V = X[:, 0]
 m = X[:, 1]
 h = X[:, 2]
 n = X[:, 3]
-ina = I_Na(V,m,h)
-ik = I_K(V, n)
-il = I_L(V)
+ina = INa(V,m,h)
+ik = IK(V, n)
+il = IL(V)
 
 pylab.figure()
 pylab.title('HH')
-pylab.plot(t,V,'k')
+pylab.plot(t,V,'k', color = "blue")
 pylab.ylabel('Voltage')
-
 pylab.show()

@@ -1,30 +1,34 @@
 from numpy import *
 from pylab import *
 
+#params and vars
 TV = 25
-dtdy = 0.5
-time = arange(0, TV+dtdy, dtdy)
+dtdy = 1
+time = arange(0, TV + dtdy, dtdy)
 timeout = 0
 
-V = zeros(len(time))
-R = 1
-C = 5
-tau = R*C
-taur = 2
-Vth = 1
-Vspike = 1
+#properties of the neuron
+trace = zeros(len(time))
+resistance = 1
+capa = 5
+timeConst = resistance * capa
+refracPer = 2
+threshold = 1
+spikeDelta = 1
 
-I = 2
+#input stimulus
+stimulus = 2
 
 
-for i, t in enumerate(time):
-	if TV > timeout:
-		V[i] = V[i-1] + (-V[i-1] + I*R) / tau * dtdy
-		if t >= Vth:
-			V[i] += Vspike
-	timeout = t + taur
-plot(time, V)
+for stimulus, timeStep in enumerate(time):
+    if TV > timeout:
+        trace[stimulus] = trace[stimulus - 1] + (-trace[stimulus - 1] + stimulus * resistance) / timeConst * dtdy
+        if timeStep >= threshold:
+            trace[stimulus] += spikeDelta
+    timeout = timeStep + refracPer
+
+plot(time, trace, color="blue")
 ylabel('Voltage')
 xlabel('Time')
-ylim([0,50])
+ylim([0, 50])
 show()
