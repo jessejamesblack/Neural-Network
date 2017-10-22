@@ -1,6 +1,5 @@
 from pylab import *
 
-time = 500
 dtdy = 1
 
 a = 0.02
@@ -13,8 +12,8 @@ tr = array([200, 500]) / dtdy
 tvec = arange(0, time, dtdy)
 
 T = ceil(time / dtdy)
-v = zeros(T)
-u = zeros(T)
+v = zeros(500)
+u = zeros(500)
 v[0] = -75
 u[0] = -15
 
