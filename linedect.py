@@ -7,7 +7,7 @@ import numpy as np
 # which operations are to be done. 
 # Make sure that the image is in the same 
 # directory in which this python program is
-img = cv2.imread('xyz.jpg')
+img = cv2.imread('hh.PNG')
 
 # Convert the img to grayscale
 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
